@@ -1,11 +1,16 @@
 import { FaChevronDown } from "react-icons/fa";
 import AssignTo from "./AssignToEditor";
+import * as db from "../../Database"
+import { useParams, useLocation, Link } from "react-router-dom";
 
 export default function AssignmentEditor() {
+    const {cid, aid} = useParams();
+    const assignments = db.assignments;
+    const assignment = assignments.find((assignment) => assignment._id === aid);
     return (
         <div id="wd-assignments-editor" className="mt-4">
             <label htmlFor="wd-name" className="form-label">Assignment Name</label> <br />
-            <input id="wd-name" className="form-control mb-10" /><br />
+            <input id="wd-name" className="form-control mb-10" placeholder={assignment ? assignment.title : ""}/><br />
             <div className="border px-3 rounded-3">
                 <br />
                 <p>The assignment is <span className="text-danger">available online</span></p>
@@ -81,8 +86,10 @@ export default function AssignmentEditor() {
         </div>
         <AssignTo />
         <div className="text-end mt-5">
+        <Link to={`/Kanbas/Courses/${cid}/Assignments/`}>
         <button type="button" className="btn btn-secondary me-2">Cancel</button>
         <button type="submit" className="btn btn-danger">Save</button>
+        </Link>
       </div>
     </div>
     );
