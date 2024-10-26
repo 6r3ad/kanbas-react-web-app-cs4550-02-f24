@@ -4,6 +4,7 @@ import { BsGripVertical } from "react-icons/bs";
 import { PiNotebookLight } from "react-icons/pi";
 import { PiPlus } from "react-icons/pi";
 import { FaCheckCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function Assignments() {
     return (
@@ -23,6 +24,7 @@ export default function Assignments() {
                         </span>
                     </div>
                     <ul className="wd-lessons list-group rounded-0">
+                    <Link to="1234" className="text-decoration-none">
                         <li className="wd-lesson list-group-item d-flex align-items-center p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
                             <PiNotebookLight className="me-4 fs-2 text-success" />
@@ -41,6 +43,8 @@ export default function Assignments() {
                             <IoMdMore className="ms-5 fs-2"/>
                             </span>
                         </li>
+                        </Link>
+                        <Link to="1234" className="text-decoration-none">
                         <li className="wd-lesson list-group-item d-flex align-items-center p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
                             <PiNotebookLight className="me-4 fs-2 text-success" />
@@ -59,6 +63,8 @@ export default function Assignments() {
                             <IoMdMore className="ms-5 fs-2"/>
                             </span>
                         </li>
+                        </Link>
+                        <Link to="1234" className="text-decoration-none">
                         <li className="wd-lesson list-group-item d-flex align-items-center p-3 ps-1">
                             <BsGripVertical className="me-2 fs-3" />
                             <PiNotebookLight className="me-4 fs-2 text-success" />
@@ -77,6 +83,7 @@ export default function Assignments() {
                             <IoMdMore className="ms-5 fs-2"/>
                             </span>
                         </li>
+                        </Link>
                     </ul>
                 </li>
             </ul> </div>
