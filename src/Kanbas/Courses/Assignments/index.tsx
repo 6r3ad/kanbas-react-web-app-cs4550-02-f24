@@ -10,6 +10,7 @@ import * as db from "../../Database"
 export default function Assignments() {
     const { cid } = useParams(); 
     const assignments = db.assignments;
+    const assignment = assignments
     return (
         <div id="wd-assignments">
             <AssignmentsControls />
@@ -37,10 +38,10 @@ export default function Assignments() {
                                     </Link>
                                     <p className="fs-6 mb-1">
                                         <span className="text-danger">Multiple Modules </span>
-                                        | <strong>Not available until</strong> May 6 at 12:00am |
+                                        | <strong>Not available until</strong> {assignment.assigned} |
                                     </p>
                                     <p className="fs-6 mb-0">
-                                        <strong>Due</strong> May 13 at 11:59pm | 100 pts
+                                        <strong>Due</strong> {assignment.due} | 100 pts
                                     </p>
                                 </div>
                                 <span className="ms-auto">
