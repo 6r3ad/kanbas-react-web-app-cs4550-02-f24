@@ -3,7 +3,6 @@ import { addModule, editModule, updateModule, deleteModule }
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import { useState } from "react";
-import * as db from "../../Database";
 import { BsGripVertical } from "react-icons/bs";
 import LessonControlButtons from "./LessonControlButtons";
 import ModuleControlButtons from "./ModuleControlButtons";
@@ -14,12 +13,15 @@ export default function Modules() {
   const [moduleName, setModuleName] = useState("");
   const { modules } = useSelector((state: any) => state.modulesReducer);
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   return (
     <ul id="wd-modules" className="d-flex gap-4 mt-5 list-group rounded-0">
+      {currentUser.role === "FACULTY" ?
       <ModulesControls setModuleName={setModuleName} moduleName={moduleName} addModule={() => {
-          dispatch(addModule({ name: moduleName, course: cid }));
-          setModuleName("");}}/>
+        dispatch(addModule({ name: moduleName, course: cid }));
+        setModuleName("");
+      }} /> : null }
       {modules
         .filter((module: any) => module.course === cid)
         .map((module: any) => (
@@ -36,16 +38,22 @@ export default function Modules() {
                     }
                   }}
                   defaultValue={module.name} />
-              )} <ModuleControlButtons moduleId={module._id}
-              deleteModule={(moduleId) => {
-                dispatch(deleteModule(moduleId));}}
-                editModule={(moduleId) => dispatch(editModule(moduleId))} />
+              )}
+              {currentUser.role === "FACULTY" ?
+                <ModuleControlButtons moduleId={module._id}
+                  deleteModule={(moduleId) => {
+                    dispatch(deleteModule(moduleId));
+                  }}
+                  editModule={(moduleId) => dispatch(editModule(moduleId))} />
+                : null}
             </div>
             {module.lessons && (
               <ul className="wd-lessons list-group rounded-0">
                 {module.lessons.map((lesson: any) => (
                   <li className="wd-lesson list-group-item p-3 ps-1">
-                    <BsGripVertical className="me-2 fs-3" /> {lesson.name} <LessonControlButtons />
+                    {currentUser.role === "FACULTY" ? (<BsGripVertical className="me-2 fs-3" />) : null}
+                    {lesson.name}
+                    {currentUser.role === "FACULTY" ? (<LessonControlButtons />) : null}
                   </li>
                 ))}</ul>)}</li>))}</ul>);
 }
