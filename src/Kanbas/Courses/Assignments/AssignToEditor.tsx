@@ -22,7 +22,6 @@ export default function AssignTo({ setAssignment, assignment, newAssignment }: {
                     </div> <br />
                     <label htmlFor="wd-due" className="mb-1"><strong>Due</strong></label>
                     <div id="wd-everyone" className="border rounded-3">
-                        console.log("setAssignment:", typeof setAssignment);
                         { newAssignment ? (
                             <input id="wd-due" className="form-control mb-10"
                                 onChange={(e) => setAssignment({ ...assignment, due: e.target.value })} />) :

@@ -4,7 +4,6 @@ import { deleteAssignment } from "./reducer";
 export default function DeleteAssignment({ dialogTitle, assignmentId }:
     { dialogTitle: string; assignmentId: string; }) {
         const dispatch = useDispatch(); 
-        console.log(assignmentId)
       return (
         <div id="wd-delete-assignment-dialog" className="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
           <div className="modal-dialog">

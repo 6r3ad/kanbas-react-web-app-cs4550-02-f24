@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import * as db from "./Database";
 import { Link } from "react-router-dom";
 
 export default function Dashboard({ courses, course, setCourse, addNewCourse,
@@ -10,7 +10,8 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
   }) {
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments } = db;
+  const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
+  const { userEnrollments } = enrollments.filter((e: any) => e.user===currentUser._id);
 
   return (
     <div id="wd-dashboard">
@@ -30,7 +31,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
             onChange={(e) => setCourse({ ...course, name: e.target.value })} />
           <textarea value={course.description} className="form-control"
             onChange={(e) => setCourse({ ...course, description: e.target.value })} />
-        </>) : null}
+        </>) : <button className="btn btn-primary float-end" id="wd-enrollments-click"> Enrollments </button>}
       <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
