@@ -63,7 +63,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                           }}
                           className="btn btn-warning me-2 float-end" >
                           Edit
-                        </button></>) : null}
+                        </button></>) : <button className="btn btn-primary float-end" id="wd-enrollments-click"> Enroll </button>}
                   </div>
                 </Link>
               </div>
