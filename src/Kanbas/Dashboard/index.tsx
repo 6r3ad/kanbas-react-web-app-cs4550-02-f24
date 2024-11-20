@@ -12,6 +12,17 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
   const { userEnrollments } = enrollments.filter((e: any) => e.user===currentUser._id);
+  const [ allCourses, setAllCourses ] = useState(true);
+  const [ dynamicCourses, setDynamicCourses] = useState(courses);
+  const toggleCourses = () => {
+    setAllCourses(!allCourses);
+    if(allCourses) {
+      setDynamicCourses(courses)
+    } else {
+      userEnrollments.map((e: any) => {
+      setDynamicCourses(courses.filter((c: any) => e.course===c._id))})
+    }
+  }
 
   return (
     <div id="wd-dashboard">
@@ -31,11 +42,11 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
             onChange={(e) => setCourse({ ...course, name: e.target.value })} />
           <textarea value={course.description} className="form-control"
             onChange={(e) => setCourse({ ...course, description: e.target.value })} />
-        </>) : <button className="btn btn-primary float-end" id="wd-enrollments-click"> Enrollments </button>}
+        </>) : <button className="btn btn-primary float-end" id="wd-enrollments-click" onClick={toggleCourses}> Enrollments </button>}
       <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {courses.map((course) => (
+          {dynamicCourses.map((course) => (
             <div className="wd-dashboard-course col" style={{ width: "300px" }}>
               <div className="card rounded-3 overflow-hidden">
                 <Link className="wd-dashboard-course-link text-decoration-none text-dark"
