@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { enroll, unenroll } from "./reducer";
+
 
 export default function Dashboard({ courses, course, setCourse, addNewCourse,
   deleteCourse, updateCourse }: {
@@ -9,18 +11,33 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
     updateCourse: () => void;
   }) {
 
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
-  const { userEnrollments } = enrollments.filter((e: any) => e.user===currentUser._id);
-  const [ allCourses, setAllCourses ] = useState(true);
-  const [ dynamicCourses, setDynamicCourses] = useState(courses);
+  const userEnrollments = enrollments.filter((e: any) => e.user === currentUser._id);
+  const [allCourses, setAllCourses] = useState(true);
+  const [dynamicCourses, setDynamicCourses] = useState(courses);
+
   const toggleCourses = () => {
     setAllCourses(!allCourses);
-    if(allCourses) {
-      setDynamicCourses(courses)
-    } else {
+    if (allCourses) {
+      setDynamicCourses(courses);
+    } 
+    else {
+      let enrolledCourses: any[] = [];
       userEnrollments.map((e: any) => {
-      setDynamicCourses(courses.filter((c: any) => e.course===c._id))})
+        enrolledCourses = [...enrolledCourses, ...courses.filter((c: any) => e.course === c._id)];
+      })
+      setDynamicCourses(enrolledCourses);
+    }
+  }
+
+  const toggleEnrolled = (courseId: any) => {
+    if (userEnrollments.some((course: any) => course.course === courseId)) {
+      dispatch(unenroll({ courseId }));
+    }
+    else {
+      dispatch(enroll({ currentUser, courseId }));
     }
   }
 
@@ -49,34 +66,38 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
           {dynamicCourses.map((course) => (
             <div className="wd-dashboard-course col" style={{ width: "300px" }}>
               <div className="card rounded-3 overflow-hidden">
-                <Link className="wd-dashboard-course-link text-decoration-none text-dark"
-                  to={`/Kanbas/Courses/${course._id}/Home`}>
-                  <img src="/images/reactjs.jpg" width="100%" height={160} />
-                  <div className="card-body">
-                    <h5 className="wd-dashboard-course-title card-title">
-                      {course.name}</h5>
-                    <p className="wd-dashboard-course-title card-text overflow-y-hidden" style={{ maxHeight: 100 }}>
-                      {course.description}</p>
+                <img src="/images/reactjs.jpg" width="100%" height={160} />
+                <div className="card-body">
+                  <h5 className="wd-dashboard-course-title card-title">
+                    {course.name}</h5>
+                  <p className="wd-dashboard-course-title card-text overflow-y-hidden" style={{ maxHeight: 100 }}>
+                    {course.description}</p>
+                  <Link className="wd-dashboard-course-link text-decoration-none text-dark"
+                    to={`/Kanbas/Courses/${course._id}/Home`}>
                     <button className="btn btn-primary"> Go </button>
-                    {currentUser.role === "FACULTY" ? (
-                      <>
-                        <button onClick={(event) => {
-                          event.preventDefault();
-                          deleteCourse(course._id);
-                        }} className="btn btn-danger float-end"
-                          id="wd-delete-course-click">
-                          Delete
-                        </button>
-                        <button id="wd-edit-course-click"
-                          onClick={(event) => {
-                            event.preventDefault();
-                            setCourse(course);
-                          }}
-                          className="btn btn-warning me-2 float-end" >
-                          Edit
-                        </button></>) : <button className="btn btn-primary float-end" id="wd-enrollments-click"> Enroll </button>}
+                  </Link>
+                
+                {currentUser.role === "FACULTY" ? (
+                  <>
+                    <button onClick={(event) => {
+                      event.preventDefault();
+                      deleteCourse(course._id);
+                    }} className="btn btn-danger float-end"
+                      id="wd-delete-course-click">
+                      Delete
+                    </button>
+                    <button id="wd-edit-course-click"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        setCourse(course);
+                      }}
+                      className="btn btn-warning me-2 float-end" >
+                      Edit
+                    </button></>) : 
+                    <button className={`btn float-end ${userEnrollments.some((anyCourse: any) => anyCourse.course === course._id) ? "btn-danger" : "btn-primary"}`} 
+                    id="wd-enrollments-click" onClick={() => toggleEnrolled(course._id)}>
+                  {userEnrollments.some((anyCourse: any) => anyCourse.course === course._id) ? "Unenroll" : "Enroll"}</button>}
                   </div>
-                </Link>
               </div>
             </div>
           ))}
