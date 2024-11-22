@@ -6,7 +6,8 @@ export default function TOC() {
     { key: "Lab1", num: "1", path: "#/Labs/Lab1" },
     { key: "Lab2", num: "2", path: "#/Labs/Lab2" },
     { key: "Lab3", num: "3", path: "#/Labs/Lab3" },
-    { key: "Lab4", num: "4", path: "#/Labs/Lab4" }
+    { key: "Lab4", num: "4", path: "#/Labs/Lab4" },
+    { key: "Lab5", num: "5", path: "#/Labs/Lab5" }
   ]
     return (
         <ul className="nav nav-pills">

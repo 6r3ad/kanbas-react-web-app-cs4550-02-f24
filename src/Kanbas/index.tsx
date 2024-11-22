@@ -1,21 +1,37 @@
 import "./styles.css";
 import { Routes, Route, Navigate } from "react-router";
+import { useState, useEffect } from "react";
 import Account from "./Account";
 import KanbasNavigation from "./Navigation";
 import Dashboard from "./Dashboard";
 import Courses from "./Courses/index"
-import { useState } from "react";
-import * as db from "./Database"
+import * as userClient from "./Account/client";
+import * as courseClient from "./Courses/client";
 import ProtectedRoute from "./Account/ProtectedRoute";
+import { useSelector } from "react-redux";
 
 export default function Kanbas() {
-  const [courses, setCourses] = useState<any[]>(db.courses);
+  const [courses, setCourses] = useState<any[]>([]);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const fetchCourses = async () => {
+    try {
+      const courses = await userClient.findMyCourses();
+      setCourses(courses);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchCourses();
+  }, [currentUser]);
   const [course, setCourse] = useState<any>({
     _id: "0", name: "New Course", number: "New Number",
     startDate: "2023-09-10", endDate: "2023-12-15",
     image: "/images/reactjs.jpg", description: "New Description"
   });
-  const updateCourse = () => {
+
+  const updateCourse = async () => {
+    await courseClient.updateCourse(course);
     setCourses(
       courses.map((c) => {
         if (c._id === course._id) {
@@ -26,14 +42,12 @@ export default function Kanbas() {
       })
     );
   };
-  const addNewCourse = () => {
-    const newCourse = {
-      ...course,
-      _id: new Date().getTime().toString()
-    };
+  const addNewCourse = async () => {
+    const newCourse = await userClient.createCourse(course);
     setCourses([...courses, newCourse]);
   };
-  const deleteCourse = (courseId: string) => {
+  const deleteCourse = async (courseId: string) => {
+    await courseClient.deleteCourse(courseId);
     setCourses(courses.filter((course) => course._id !== courseId));
   };
   return (
