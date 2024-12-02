@@ -8,11 +8,19 @@ import { Link, useParams } from "react-router-dom";
 import * as db from "../../Database"
 import { useSelector } from "react-redux";
 import DeleteAssignment from "./DeleteAssignment";
+import { useEffect } from "react";
+import { fetchAllAssignments } from "./client";
 
 export default function Assignments() {
     const { cid } = useParams();
     const { assignments } = useSelector((state: any) => state.assignmentsReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
+    
+    useEffect(()=> {
+        
+    }, [assignments]) 
+
+
     console.log(assignments)
     return (
         <div id="wd-assignments">

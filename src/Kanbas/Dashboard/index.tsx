@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { enroll, unenroll, getEnrollments } from "./reducer";
 import * as enrollClient from "./client";
-
+import * as courseClient from "../Courses/client";
+import * as userClient from "../Account/client"
 
 export default function Dashboard({ courses, course, setCourse, addNewCourse,
   deleteCourse, updateCourse }: {
@@ -22,26 +23,25 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
     useEffect(() => {
       fetchEnroll();
     }, []);
+
   const [allCourses, setAllCourses] = useState(true);
   const [dynamicCourses, setDynamicCourses] = useState(courses);
   const toggleCourses = async () => {
     setAllCourses(!allCourses);
     if (allCourses) {
-      setDynamicCourses(courses);
+      let enrolledCourses = await courseClient.fetchAllCourses();
+      setDynamicCourses(enrolledCourses);
     } 
     else {
-      let enrolledCourses = await enrollClient.getEnrollments(currentUser._id);
+      let enrolledCourses = await userClient.findMyCourses();
       setDynamicCourses(enrolledCourses);
     }
   }
 
   const toggleEnrolled = async (courseId: any) => {
-    if (enrollments.some((course: any) => course.course === courseId)) {
-      dispatch(unenroll({ courseId }));
-    }
-    else {
-      dispatch(enroll({ currentUser, courseId }));
-    }
+   await enrollClient.toggleEnroll(currentUser._id, courseId);
+   dispatch(getEnrollments(enrollments));
+   setEnrollments(enrollments);
   }
 
   return (

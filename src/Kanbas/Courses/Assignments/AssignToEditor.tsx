@@ -1,13 +1,8 @@
 import { RxCross2 } from "react-icons/rx";
-import { useParams } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
-import { updateAssignment } from "./reducer";
-import { useState } from "react";
-export default function AssignTo({ setAssignment, assignment, newAssignment }: { setAssignment: (updatedAssignment: any) => void, assignment: any, newAssignment: any }) {
-    const { aid } = useParams();
-    const dispatch = useDispatch();
-    
+export default function AssignTo({ setAssignment, assignment, newAssignment }
+    : { setAssignment: (updatedAssignment: any) => void, assignment: any, newAssignment: any }) {
+
     return (
         <div className="row">
             <label className="col-sm-2 col-form-label text-end">Assign</label>
