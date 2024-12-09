@@ -5,23 +5,25 @@ import { PiNotebookLight } from "react-icons/pi";
 import { PiPlus } from "react-icons/pi";
 import { FaCheckCircle, FaTrash } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
-import * as db from "../../Database"
 import { useSelector } from "react-redux";
 import DeleteAssignment from "./DeleteAssignment";
-import { useEffect } from "react";
-import { fetchAllAssignments } from "./client";
+import { useEffect, useState } from "react";
+import * as client from "./client";
 
 export default function Assignments() {
     const { cid } = useParams();
-    const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+    const [ assignments, setAssignments ] = useState([]);
+    const { currentAssignments } = useSelector((state: any) => state.assignmentsReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+    const fetchAssignments = async () => {
+      const assignments = await client.fetchAllAssignments();
+      setAssignments(assignments);
+    };
+    useEffect(() => {
+      fetchAssignments();
+    }, [cid]);
     
-    useEffect(()=> {
-        
-    }, [assignments]) 
-
-
-    console.log(assignments)
     return (
         <div id="wd-assignments">
             <AssignmentsControls />

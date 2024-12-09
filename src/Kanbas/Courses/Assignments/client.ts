@@ -5,7 +5,7 @@ const axiosWithCredentials = axios.create({ withCredentials: true });
 
 
 export const fetchAllAssignments = async () => {
-    const { data } = await axios.get(ASSIGN_API);
+    const { data } = await axiosWithCredentials.get(ASSIGN_API);
     return data;
 }
 
@@ -14,8 +14,8 @@ export const updateAssignment = async (assignment : any) => {
     return data;
 }
 
-export const createAssignment = async (assignment : any) => {
-    const { data } = await axiosWithCredentials.post(`${ASSIGN_API}/${assignment._id}`);
+export const createAssignment = async () => {
+    const { data } = await axiosWithCredentials.post(ASSIGN_API);
     return data;
 }
 

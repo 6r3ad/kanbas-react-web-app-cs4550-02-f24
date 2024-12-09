@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { enroll, unenroll, getEnrollments } from "./reducer";
+import { getEnrollments } from "./reducer";
 import * as enrollClient from "./client";
 import * as courseClient from "../Courses/client";
 import * as userClient from "../Account/client"
@@ -39,7 +39,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
   }
 
   const toggleEnrolled = async (courseId: any) => {
-   await enrollClient.toggleEnroll(currentUser._id, courseId);
+   const enrollments = await enrollClient.toggleEnroll(currentUser._id, courseId);
    dispatch(getEnrollments(enrollments));
    setEnrollments(enrollments);
   }
@@ -62,7 +62,8 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
             onChange={(e) => setCourse({ ...course, name: e.target.value })} />
           <textarea value={course.description} className="form-control"
             onChange={(e) => setCourse({ ...course, description: e.target.value })} />
-        </>) : <button className="btn btn-primary float-end" id="wd-enrollments-click" onClick={toggleCourses}> Enrollments </button>}
+        </>) : <button className="btn btn-primary float-end" id="wd-enrollments-click" onClick={toggleCourses}>  {allCourses ? "All Courses" : "My Courses"} </button>}
+        <div id="wd-dashboard-published" className="row"/>
       <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">

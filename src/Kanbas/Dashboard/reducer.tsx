@@ -10,6 +10,7 @@ reducers: {
     getEnrollments: (state, action) => {
         state.enrollments = action.payload;
     },
+    
     enroll: (state, { payload: { currentUser, courseId } } ) => {
         const newEnrollment: any = {
             _id: state.enrollments.length + 1,
